@@ -1,0 +1,655 @@
+/* SCF AutoWorks LLC — shop-floor design system.
+   Palette: asphalt charcoal, bone white, Hemi Orange (a real Mopar engine
+   paint color), and manila work-order paper for the estimate section. */
+
+:root {
+  --asphalt: #15181c;
+  --steel: #1c2025;
+  --line: #2e333a;
+  --bone: #ede8dc;
+  --dust: #9c958a;
+  --hemi: #e8622c;
+  --hemi-hot: #ff7a3d;
+  --paper: #e9ddbf;
+  --paper-edge: #d8c99f;
+  --ink: #2a241a;
+  --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --body: "Barlow", "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--asphalt);
+  color: var(--bone);
+  font-family: var(--body);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle shop-floor texture: a faint blueprint grid. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.14;
+  z-index: 0;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+}
+
+.accent {
+  color: var(--hemi);
+}
+
+:focus-visible {
+  outline: 3px solid var(--hemi-hot);
+  outline-offset: 3px;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem clamp(1rem, 4vw, 3rem);
+  background: color-mix(in srgb, var(--asphalt) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.brand-mark {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--asphalt);
+  background: var(--hemi);
+  padding: 0.15em 0.3em 0.1em;
+}
+
+.brand-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.brand-name em {
+  font-style: normal;
+  color: var(--dust);
+  font-weight: 700;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 2vw, 1.8rem);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--dust);
+  transition: color 150ms;
+}
+
+.site-nav a:hover {
+  color: var(--bone);
+}
+
+.site-nav .nav-cta {
+  color: var(--asphalt);
+  background: var(--hemi);
+  padding: 0.5em 1em;
+  transition: background 150ms;
+}
+
+.site-nav .nav-cta:hover {
+  background: var(--hemi-hot);
+  color: var(--asphalt);
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: clamp(4rem, 12vh, 9rem) clamp(1rem, 6vw, 5rem) clamp(3rem, 8vh, 6rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-kicker {
+  color: var(--hemi);
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 13.5vw, 12.5rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+}
+
+.hero-title .line {
+  display: block;
+}
+
+.hero-sub {
+  max-width: 34em;
+  margin-top: 2rem;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  color: var(--dust);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.spec-strip {
+  margin-top: clamp(2.5rem, 6vh, 4.5rem);
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--line);
+  color: var(--dust);
+  font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+}
+
+.spec-strip .sep {
+  color: var(--hemi);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 1.25rem;
+  text-decoration: none;
+  padding: 0.7em 1.4em;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 150ms, color 150ms, border-color 150ms, transform 150ms;
+}
+
+.btn-primary {
+  background: var(--hemi);
+  color: var(--asphalt);
+}
+
+.btn-primary:hover {
+  background: var(--hemi-hot);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  border-color: var(--line);
+  color: var(--bone);
+}
+
+.btn-ghost:hover {
+  border-color: var(--hemi);
+  color: var(--hemi);
+}
+
+.btn-big {
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+/* ── Sections ───────────────────────────────────────────────────────── */
+
+.section {
+  padding: clamp(3.5rem, 9vh, 7rem) clamp(1rem, 6vw, 5rem);
+}
+
+.section-rule {
+  border-top: 1px solid var(--line);
+}
+
+.section-title {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.section-note {
+  color: var(--dust);
+  font-size: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+
+.section-lead {
+  max-width: 38em;
+  color: var(--dust);
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  margin-bottom: 2rem;
+}
+
+/* ── Work order rows ────────────────────────────────────────────────── */
+
+.op-table {
+  border-top: 1px solid var(--line);
+}
+
+.op-row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 10rem) 1fr;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.8rem, 4vh, 3rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.op-code {
+  color: var(--dust);
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  padding-top: 0.55rem;
+  transition: color 150ms;
+}
+
+.op-row:hover .op-code {
+  color: var(--hemi);
+}
+
+.op-body h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+  line-height: 1;
+  margin-bottom: 0.8rem;
+}
+
+.op-body p {
+  max-width: 44em;
+  color: var(--dust);
+  margin-bottom: 1.4rem;
+}
+
+/* Torque-spec dotted leaders. */
+.spec-list {
+  list-style: none;
+  max-width: 34rem;
+  font-size: 0.9rem;
+}
+
+.spec-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.35rem 0;
+  color: var(--bone);
+}
+
+.spec-list li::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dotted var(--line);
+}
+
+.spec-list li::before {
+  content: "▸";
+  color: var(--hemi);
+}
+
+/* ── Platforms ──────────────────────────────────────────────────────── */
+
+.badge-row {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 3rem;
+}
+
+.badge {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 1.15rem;
+  padding: 0.45em 1em;
+  border: 1px solid var(--line);
+  background: var(--steel);
+  transition: border-color 150ms, color 150ms;
+}
+
+.badge:hover {
+  border-color: var(--hemi);
+  color: var(--hemi);
+}
+
+.cred {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  max-width: 40em;
+  color: var(--dust);
+}
+
+.cred strong {
+  color: var(--bone);
+}
+
+.cred-seal {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 50%;
+  border: 3px solid var(--hemi);
+  color: var(--hemi);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.4rem;
+}
+
+/* ── Service area ───────────────────────────────────────────────────── */
+
+.town-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.5rem 2rem;
+  max-width: 60rem;
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+}
+
+.town-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.town-list li::before {
+  content: "→ ";
+  color: var(--hemi);
+}
+
+/* ── Estimate: the paper work order ─────────────────────────────────── */
+
+.paper {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--steel) 0 24px,
+    color-mix(in srgb, var(--steel) 80%, var(--asphalt)) 24px 48px
+  );
+  border-top: 4px solid var(--hemi);
+}
+
+.paper-sheet {
+  max-width: 46rem;
+  margin: 0 auto;
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.5);
+  border: 1px solid var(--paper-edge);
+}
+
+.paper-head {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.paper-head h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1;
+}
+
+.paper-head .mono {
+  color: color-mix(in srgb, var(--ink) 70%, var(--paper));
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.estimate-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-wide {
+  grid-column: 1 / -1;
+}
+
+.field-trio {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 6rem 1fr 1fr;
+  gap: 1rem;
+}
+
+.field-trio > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.field .opt {
+  color: color-mix(in srgb, var(--ink) 55%, var(--paper));
+  text-transform: none;
+}
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ink);
+  padding: 0.45rem 0.1rem;
+  border-radius: 0;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: color-mix(in srgb, var(--ink) 40%, var(--paper));
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--hemi);
+}
+
+.field textarea {
+  resize: vertical;
+  border: 2px solid var(--ink);
+  padding: 0.6rem;
+}
+
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea,
+.field-trio div.invalid input {
+  border-color: #b3261e;
+}
+
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.form-status {
+  grid-column: 1 / -1;
+  min-height: 1.4em;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.form-status.ok {
+  color: #22623a;
+}
+
+.form-status.err {
+  color: #b3261e;
+}
+
+.estimate-form .btn-big {
+  grid-column: 1 / -1;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────── */
+
+.site-footer {
+  padding: clamp(2.5rem, 6vh, 4rem) clamp(1rem, 6vw, 5rem);
+  border-top: 1px solid var(--line);
+  color: var(--dust);
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.footer-brand {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: var(--hemi);
+}
+
+.footer-brand span {
+  color: var(--bone);
+}
+
+.footer-fine {
+  font-size: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* ── Reveal animation ───────────────────────────────────────────────── */
+
+/* Hidden-until-revealed only applies once JS has announced itself by
+   putting .js on <html>; without JS the page renders fully visible. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 550ms ease, transform 550ms ease;
+}
+
+.js .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn-primary:hover {
+    transform: none;
+  }
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .site-nav {
+    flex-wrap: wrap;
+  }
+
+  .op-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .estimate-form {
+    grid-template-columns: 1fr;
+  }
+
+  .field-trio {
+    grid-template-columns: 1fr;
+  }
+}
