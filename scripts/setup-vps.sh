@@ -30,6 +30,26 @@ check_sources() {
   command -v nginx >/dev/null || die "nginx is not installed (apt install nginx)"
 }
 
+# Catch unit/host mismatches (wrong user, missing deno, wrong repo path)
+# before systemd fails with an opaque 217/USER or 203/EXEC.
+check_unit_matches_host() {
+  local unit="${REPO_DIR}/systemd/${SERVICE_NAME}.service"
+  local unit_user unit_exec unit_wd
+
+  unit_user="$(sed -n 's/^User=//p' "${unit}")"
+  unit_exec="$(sed -n 's/^ExecStart=\([^ ]*\).*/\1/p' "${unit}")"
+  unit_wd="$(sed -n 's/^WorkingDirectory=//p' "${unit}")"
+
+  getent passwd "${unit_user}" >/dev/null ||
+    die "Unit runs as User=${unit_user}, but that user does not exist on this host"
+  [[ -x "${unit_exec}" ]] ||
+    die "Unit ExecStart binary not found or not executable: ${unit_exec}"
+  [[ -d "${unit_wd}" ]] ||
+    die "Unit WorkingDirectory does not exist: ${unit_wd}"
+  [[ "${unit_wd}" == "${REPO_DIR}" ]] ||
+    warn "Unit WorkingDirectory (${unit_wd}) is not this checkout (${REPO_DIR})"
+}
+
 install_systemd_unit() {
   say "Installing systemd unit → /etc/systemd/system/${SERVICE_NAME}.service"
   install -m 0644 "${REPO_DIR}/systemd/${SERVICE_NAME}.service" \
@@ -72,6 +92,7 @@ smoke_test() {
 
 require_root
 check_sources
+check_unit_matches_host
 install_systemd_unit
 install_nginx_conf
 smoke_test
