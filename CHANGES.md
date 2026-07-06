@@ -1,5 +1,11 @@
 # Changes
 
+## 2026-07-06 — Zod from JSR instead of npm
+
+- Swapped the `zod` import mapping to `jsr:@zod/zod` and regenerated `deno.lock` (also dropping a
+  stray `playwright-core` entry picked up during local testing). The dependency tree is now entirely
+  JSR — no npm registry needed. Code imports (`from "zod"`) are unchanged.
+
 ## 2026-07-06 — Admin dashboard, login, and Deno KV settings
 
 - Admin dashboard at `/admin` (login at `/admin/login`) for managing contact details, address,
