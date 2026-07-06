@@ -8,5 +8,5 @@ import { startServer } from "./src/server.ts";
 if (import.meta.main) {
   const config = loadConfig();
   console.log(`SCF AutoWorks web — http://${config.hostname}:${config.port}`);
-  startServer(config);
+  await startServer(config);
 }

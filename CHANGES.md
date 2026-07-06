@@ -1,5 +1,19 @@
 # Changes
 
+## 2026-07-06 — Admin dashboard, login, and Deno KV settings
+
+- Admin dashboard at `/admin` (login at `/admin/login`) for managing contact details, address,
+  hours, and the brand badges — changes go live on the public site the moment they're saved.
+- Storage moved to Deno KV (`KV_PATH`, default `data/site.kv`): site settings, the admin credential,
+  sessions (8h TTL via KV `expireIn`), and login throttling (5 fails → 15-minute lockout) all live
+  there. Public pages render from KV settings merged over `src/data/shop.ts` defaults.
+- Auth: PBKDF2-SHA256 (210k iterations) password hashing, constant-time verify, HttpOnly
+  SameSite=Strict session cookie (Secure behind HTTPS).
+- `scripts/setup-admin-password.ts` (`deno task setup-password`) sets or replaces the admin password
+  — interactive with hidden input, or via `SCF_ADMIN_PASSWORD` for automation.
+- systemd unit gains `--unstable-kv`, `KV_PATH=/var/lib/denogenesis/site.kv`, and KV_PATH in
+  `--allow-env`. New tests for auth, sessions, KV settings, and the settings schema (19 total).
+
 ## 2026-07-06 — Add Asian imports to platform coverage
 
 - Per SCF AutoWorks: the shop also works on Honda, Hyundai, Kia, and other Asian vehicles. Added

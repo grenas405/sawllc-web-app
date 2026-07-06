@@ -1,12 +1,15 @@
 {
+  "unstable": ["kv"],
   "tasks": {
     "dev": "deno run --watch --allow-net --allow-read --allow-write=data --allow-env main.ts",
     "start": "deno run --allow-net --allow-read --allow-write=data --allow-env main.ts",
-    "test": "deno test --allow-read",
-    "check": "deno check main.ts && deno lint && deno fmt --check"
+    "test": "deno test --allow-read --allow-write=data",
+    "check": "deno check main.ts scripts/setup-admin-password.ts && deno lint && deno fmt --check",
+    "setup-password": "deno run --allow-read --allow-write=data --allow-env scripts/setup-admin-password.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.0",
+    "@std/cli": "jsr:@std/cli@^1.0.0",
     "@std/http": "jsr:@std/http@^1.0.0",
     "@std/html": "jsr:@std/html@^1.0.0",
     "zod": "npm:zod@^4.0.0"

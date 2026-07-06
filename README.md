@@ -63,6 +63,22 @@ tail -f data/estimate-requests.jsonl | jq .
 `POST /api/contact` returns `201 {ok, id}` on success, `422 {ok:false, errors:[{field,message}]}` on
 validation failure. A honeypot field (`company`) silently drops bot submissions.
 
+## Admin
+
+`/admin` is a dashboard for managing the shop's contact details, address, hours, and brand badges;
+saves go live on the public site immediately. Settings, the admin credential, sessions, and login
+throttling live in Deno KV (`KV_PATH`, default `data/site.kv`), merged over the defaults in
+`src/data/shop.ts`. Set (or replace) the admin password with:
+
+```sh
+deno task setup-password                                # interactive, hidden input
+# on the VPS:
+sudo -u sysadmin KV_PATH=/var/lib/denogenesis/site.kv \
+  deno task setup-password
+```
+
+Login sessions last 8 hours; five failed sign-ins lock the source IP out for 15 minutes.
+
 ## Design
 
 Styled as a shop work order: services are labor-op line items (OP 100–400) with torque-spec dotted

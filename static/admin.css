@@ -1,0 +1,198 @@
+/* admin.css — the shop office. Builds on styles.css tokens. */
+
+/* ── Login ──────────────────────────────────────────────────────────── */
+
+.login-wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.login-card {
+  width: min(30rem, 100%);
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border: 1px solid var(--paper-edge);
+  border-top: 6px solid var(--hemi);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.5);
+  display: grid;
+  gap: 1.4rem;
+}
+
+.login-kicker {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--ink) 65%, var(--paper));
+}
+
+.login-card h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  line-height: 0.9;
+}
+
+.login-card .field input {
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+}
+
+.login-hint {
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--ink) 55%, var(--paper));
+}
+
+.login-hint code {
+  background: color-mix(in srgb, var(--ink) 12%, var(--paper));
+  padding: 0.1em 0.4em;
+}
+
+/* ── Dashboard ──────────────────────────────────────────────────────── */
+
+.admin-main {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vh, 4.5rem) clamp(1rem, 4vw, 3rem) 9rem;
+}
+
+.admin-main .section-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: var(--steel);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+
+.panel h2 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  line-height: 1;
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+
+.panel-num {
+  color: var(--hemi);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.4rem;
+}
+
+.panel-field:last-child {
+  margin-bottom: 0;
+}
+
+.panel-field label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dust);
+}
+
+.panel-field input,
+.panel-field textarea {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  color: var(--bone);
+  background: var(--asphalt);
+  border: 2px solid var(--line);
+  padding: 0.75rem 0.9rem;
+  border-radius: 0;
+}
+
+.panel-field input:focus,
+.panel-field textarea:focus {
+  outline: none;
+  border-color: var(--hemi);
+}
+
+.panel-field textarea {
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.panel-field.invalid input,
+.panel-field.invalid textarea {
+  border-color: #e2574c;
+}
+
+.hint {
+  font-size: 0.72rem;
+  color: var(--dust);
+}
+
+#brand-preview {
+  margin: 1.2rem 0 0;
+}
+
+#brand-preview .badge {
+  font-size: 0.95rem;
+}
+
+/* ── Save bar ───────────────────────────────────────────────────────── */
+
+.save-bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  background: color-mix(in srgb, var(--asphalt) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-top: 2px solid var(--hemi);
+  z-index: 10;
+}
+
+.save-bar .btn-big {
+  width: auto;
+  font-size: 1.3rem;
+}
+
+.save-bar .form-status {
+  min-height: 0;
+}
+
+.save-bar .form-status.ok {
+  color: #7dd792;
+}
+
+.save-bar .form-status.err {
+  color: #e2574c;
+}
+
+.admin .site-nav .nav-cta {
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .save-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .save-bar .btn-big {
+    width: 100%;
+  }
+}

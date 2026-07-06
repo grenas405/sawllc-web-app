@@ -6,6 +6,7 @@
  */
 
 import { platforms, serviceArea, services, shop } from "../data/shop.ts";
+import { phoneHref, type SiteSettings } from "../settings.ts";
 import { escape, layout } from "./layout.ts";
 
 function header(): string {
@@ -24,7 +25,7 @@ function header(): string {
 </header>`;
 }
 
-function hero(): string {
+function hero(s: SiteSettings): string {
   return `
 <section class="hero">
   <p class="hero-kicker mono reveal">// ${escape(shop.city).toUpperCase()}, ${
@@ -39,7 +40,7 @@ function hero(): string {
   data, repair to spec, and road-test everything before it leaves the bay.</p>
   <div class="hero-actions reveal">
     <a class="btn btn-primary" href="#estimate">Request an estimate</a>
-    <a class="btn btn-ghost" href="${shop.phoneHref}">Call ${escape(shop.phone)}</a>
+    <a class="btn btn-ghost" href="${phoneHref(s.phone)}">Call ${escape(s.phone)}</a>
   </div>
   <p class="spec-strip mono reveal" aria-label="Specialties">
     GM LS / LT <span class="sep">·</span> MOPAR HEMI <span class="sep">·</span>
@@ -73,8 +74,8 @@ function workSection(): string {
 </section>`;
 }
 
-function platformSection(): string {
-  const badges = platforms.badges
+function platformSection(s: SiteSettings): string {
+  const badges = s.badges
     .map((b) => `<li class="badge">${escape(b)}</li>`)
     .join("");
   return `
@@ -88,13 +89,13 @@ function platformSection(): string {
 </section>`;
 }
 
-function areaSection(): string {
+function areaSection(s: SiteSettings): string {
   const towns = serviceArea.map((t) => `<li>${escape(t)}</li>`).join("");
   return `
 <section class="section section-rule" id="area">
   <h2 class="section-title reveal">Serving the <span class="accent">OKC metro</span></h2>
   <ul class="town-list mono reveal" role="list">${towns}</ul>
-  <p class="section-lead reveal">${escape(shop.hours)} · ${escape(shop.address)}</p>
+  <p class="section-lead reveal">${escape(s.hours)} · ${escape(s.address)}</p>
 </section>`;
 }
 
@@ -159,14 +160,14 @@ function estimateForm(): string {
 </section>`;
 }
 
-function footer(): string {
+function footer(s: SiteSettings): string {
   const year = new Date().getFullYear();
   return `
 <footer class="site-footer">
   <p class="footer-brand">SCF <span>AutoWorks LLC</span></p>
-  <p>${escape(shop.address)} · <a href="${shop.phoneHref}">${escape(shop.phone)}</a> ·
-     <a href="mailto:${escape(shop.email)}">${escape(shop.email)}</a></p>
-  <p>${escape(shop.hours)}</p>
+  <p>${escape(s.address)} · <a href="${phoneHref(s.phone)}">${escape(s.phone)}</a> ·
+     <a href="mailto:${escape(s.email)}">${escape(s.email)}</a></p>
+  <p>${escape(s.hours)}</p>
   <p class="footer-fine mono">&copy; ${year} ${escape(shop.name)} · ${
     escape(shop.credential)
   } · Oklahoma LLC — records at the
@@ -174,7 +175,7 @@ function footer(): string {
 </footer>`;
 }
 
-export function renderHome(): string {
+export function renderHome(s: SiteSettings): string {
   return layout({
     title: `${shop.name} — Engine, Transmission & Performance | Oklahoma City`,
     description:
@@ -182,13 +183,13 @@ export function renderHome(): string {
     body: [
       header(),
       "<main>",
-      hero(),
+      hero(s),
       workSection(),
-      platformSection(),
-      areaSection(),
+      platformSection(s),
+      areaSection(s),
       estimateForm(),
       "</main>",
-      footer(),
+      footer(s),
     ].join("\n"),
   });
 }
