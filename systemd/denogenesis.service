@@ -1,0 +1,51 @@
+[Unit]
+Description=SCF AutoWorks LLC Website (denogenesis.com)
+Documentation=https://denogenesis.com
+After=network.target
+
+[Service]
+Type=simple
+User=grenas405
+Group=grenas405
+# systemd uses %h correctly in most fields, but not inside ExecStart for path expansion
+WorkingDirectory=/home/grenas405/.local/src/development/sawllc-web-app
+EnvironmentFile=-/etc/denogenesis.env
+Environment=PORT=8004
+Environment=HOST=127.0.0.1
+Environment=STATIC_DIR=/home/grenas405/.local/src/development/sawllc-web-app/static
+Environment=DATA_DIR=/var/lib/denogenesis
+# Persistent module cache: PrivateTmp would wipe /tmp on every restart and the
+# app has remote deps (jsr:@std/*, npm:zod) that would re-download each start.
+Environment=DENO_DIR=/var/lib/denogenesis/deno-cache
+# Use %h here instead of $HOME; systemd doesn't expand shell variables in ExecStart
+# Keep --allow-env in sync with every Deno.env.get() call (src/config.ts).
+ExecStart=/home/grenas405/.deno/bin/deno run \
+    --allow-net=127.0.0.1:8004 \
+    --allow-read=/home/grenas405/.local/src/development/sawllc-web-app/static,/var/lib/denogenesis \
+    --allow-write=/var/lib/denogenesis \
+    --allow-env=PORT,HOST,DATA_DIR,STATIC_DIR \
+    main.ts
+Restart=on-failure
+KillMode=control-group
+RestartSec=5
+StateDirectory=denogenesis
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=read-only
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=strict
+ReadOnlyPaths=/home/grenas405/.local/src/development/sawllc-web-app
+ReadWritePaths=/var/lib/denogenesis
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictRealtime=true
+SystemCallArchitectures=native
+UMask=0077
+
+[Install]
+WantedBy=default.target

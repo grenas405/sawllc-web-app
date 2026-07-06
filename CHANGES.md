@@ -1,5 +1,20 @@
 # Changes
 
+## 2026-07-06 — Deployment configs (systemd + nginx)
+
+- Added `systemd/denogenesis.service`: hardened unit (ProtectSystem=strict, NoNewPrivileges,
+  PrivateTmp, etc.) running the app as `grenas405` on `127.0.0.1:8004` with least-privilege Deno
+  flags; estimate data persists in `/var/lib/denogenesis` via `StateDirectory`; module cache kept in
+  the state dir so restarts don't re-download deps.
+- Added `nginx/denogenesis.com.conf`: HTTP→HTTPS redirect, apex→www canonicalization, TLS 1.2/1.3,
+  full security-header set with CSP extended for Google Fonts, gzip, and a proxy to
+  `127.0.0.1:8004`; `/healthz` proxied with access_log off; `client_max_body_size` raised to 16k so
+  the estimate form's 2000-char message fits. Access/error logs named `scfllc-web-app.*.log`
+  (originally `sfcllc`, a typo, fixed same day).
+- Added `scripts/setup-vps.sh`: idempotent root script that installs the systemd unit and nginx
+  config on the VPS, enables the service, and reloads nginx — skipping the nginx activation with
+  guidance if the Let's Encrypt certificate doesn't exist yet.
+
 ## 2026-07-06 — Fix: shop.ts was missing from the repository
 
 - The unanchored `data/` pattern in `.gitignore` also matched `src/data/`, so `src/data/shop.ts` was

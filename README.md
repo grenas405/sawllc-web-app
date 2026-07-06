@@ -72,6 +72,26 @@ Shoulders Display / Barlow / IBM Plex Mono. The page works without JavaScript (f
 normal POST; reveal animations only engage when JS is present) and respects
 `prefers-reduced-motion`.
 
+## Deployment
+
+`systemd/denogenesis.service` runs the app on `127.0.0.1:8004` as a hardened systemd service
+(least-privilege Deno flags, `ProtectSystem=strict`, state in `/var/lib/denogenesis`).
+`nginx/denogenesis.com.conf` terminates TLS for denogenesis.com, redirects HTTP and the apex to
+`https://www.denogenesis.com`, sets security headers (CSP allows Google Fonts), and proxies to the
+service. Install:
+
+```sh
+sudo cp systemd/denogenesis.service /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now denogenesis
+sudo cp nginx/denogenesis.com.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/denogenesis.com.conf /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Requires a Let's Encrypt cert at `/etc/letsencrypt/live/denogenesis.com/` (certbot webroot at
+`/var/www/certbot`). Nginx logs land in `/var/log/nginx/scfllc-web-app.{access,error}.log`.
+`scripts/setup-vps.sh` automates the install steps above (run it with sudo on the VPS).
+
 ## Before launch
 
 Placeholders live in `src/data/shop.ts` — replace phone, email, address, and hours with the real
