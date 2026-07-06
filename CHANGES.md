@@ -1,5 +1,11 @@
 # Changes
 
+## 2026-07-06 — Fix: shop.ts was missing from the repository
+
+- The unanchored `data/` pattern in `.gitignore` also matched `src/data/`, so `src/data/shop.ts` was
+  silently excluded from the initial commit. Anchored the pattern to the repo root (`/data/`) and
+  committed the file.
+
 ## 2026-07-06 — Generic contact placeholders
 
 - Replaced the realistic-looking placeholder contact details in `src/data/shop.ts` with unmistakably
