@@ -43,7 +43,8 @@ function hero(): string {
   </div>
   <p class="spec-strip mono reveal" aria-label="Specialties">
     GM LS / LT <span class="sep">·</span> MOPAR HEMI <span class="sep">·</span>
-    LATE-MODEL DOMESTIC <span class="sep">·</span> SELECT EUROPEAN
+    LATE-MODEL DOMESTIC <span class="sep">·</span> ASIAN IMPORTS <span class="sep">·</span>
+    SELECT EUROPEAN
   </p>
 </section>`;
 }
@@ -82,8 +83,8 @@ function platformSection(): string {
   <p class="section-lead reveal">${escape(platforms.detail)}</p>
   <ul class="badge-row reveal" role="list">${badges}</ul>
   <p class="cred reveal"><span class="cred-seal" aria-hidden="true">ASE</span>
-  Our technicians are <strong>ASE Certified</strong> — tested, credentialed, and held to a
-  national standard.</p>
+  <span>Our technicians are <strong>ASE Certified</strong> — tested, credentialed, and held to a
+  national standard.</span></p>
 </section>`;
 }
 
@@ -177,7 +178,7 @@ export function renderHome(): string {
   return layout({
     title: `${shop.name} — Engine, Transmission & Performance | Oklahoma City`,
     description:
-      "ASE Certified auto repair in Oklahoma City. Engine & transmission repair, suspension, electrical diagnostics, and performance upgrades. GM & Mopar specialists.",
+      "ASE Certified auto repair in Oklahoma City. Engine & transmission repair, suspension, electrical diagnostics, and performance upgrades. GM & Mopar specialists — Honda, Hyundai, Kia, and other Asian imports welcome.",
     body: [
       header(),
       "<main>",

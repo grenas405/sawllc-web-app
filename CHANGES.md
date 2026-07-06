@@ -1,5 +1,20 @@
 # Changes
 
+## 2026-07-06 — Add Asian imports to platform coverage
+
+- Per SCF AutoWorks: the shop also works on Honda, Hyundai, Kia, and other Asian vehicles. Added
+  them to the platform badges and copy in `src/data/shop.ts`, the hero spec strip, and the meta
+  description.
+
+## 2026-07-06 — Fix: systemd unit failed on the VPS (217/USER)
+
+- The unit was written with this dev box's user (`grenas405`); the VPS runs as `sysadmin`, so
+  systemd exited 217/USER. Switched `User`, `Group`, and all paths in `systemd/denogenesis.service`
+  to `sysadmin`.
+- `scripts/setup-vps.sh` now preflights the unit against the host — user exists, ExecStart binary is
+  executable, WorkingDirectory exists and matches the checkout — so mismatches fail with a clear
+  message instead of an opaque 217/USER or 203/EXEC from systemd.
+
 ## 2026-07-06 — Deployment configs (systemd + nginx)
 
 - Added `systemd/denogenesis.service`: hardened unit (ProtectSystem=strict, NoNewPrivileges,

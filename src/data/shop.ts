@@ -86,8 +86,21 @@ export const services: readonly Service[] = [
 export const platforms = {
   headline: "GM & Mopar are our home turf.",
   detail:
-    "We work primarily on late-model domestic vehicles — trucks, muscle, and daily drivers — with deep specialization in GM and Mopar platforms. We also take on select European vehicles.",
-  badges: ["Chevrolet", "GMC", "Cadillac", "Dodge", "RAM", "Jeep", "Chrysler", "Select European"],
+    "We work primarily on late-model domestic vehicles — trucks, muscle, and daily drivers — with deep specialization in GM and Mopar platforms. We also service Honda, Hyundai, Kia, and the other Asian imports, plus select European vehicles.",
+  badges: [
+    "Chevrolet",
+    "GMC",
+    "Cadillac",
+    "Dodge",
+    "RAM",
+    "Jeep",
+    "Chrysler",
+    "Honda",
+    "Hyundai",
+    "Kia",
+    "Asian Imports",
+    "Select European",
+  ],
 } as const;
 
 export const serviceArea: readonly string[] = [
