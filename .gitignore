@@ -1,2 +1,3 @@
 # Customer estimate requests — runtime data, never commit.
-data/
+# Root-anchored: must not match src/data/.
+/data/

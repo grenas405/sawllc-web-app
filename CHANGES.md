@@ -1,5 +1,11 @@
 # Changes
 
+## 2026-07-06 — Generic contact placeholders
+
+- Replaced the realistic-looking placeholder contact details in `src/data/shop.ts` with unmistakably
+  generic ones (`(405) 000-0000`, `info@example.com`, `123 Placeholder Ave`) so they cannot be
+  mistaken for real business information before launch.
+
 ## 2026-07-06 — Initial release
 
 - Scaffolded Deno web app: `@std/http` server, Zod validation, no build step.
