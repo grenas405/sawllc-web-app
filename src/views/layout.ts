@@ -10,6 +10,8 @@ export interface Page {
   readonly title: string;
   readonly description: string;
   readonly body: string;
+  /** Extra tags for <head>: OpenGraph, canonical, JSON-LD, … */
+  readonly head?: string;
 }
 
 export function layout(page: Page): string {
@@ -26,6 +28,7 @@ export function layout(page: Page): string {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
+${page.head ?? ""}
 </head>
 <body>
 ${page.body}

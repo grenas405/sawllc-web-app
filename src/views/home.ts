@@ -5,9 +5,13 @@
  * leaders, and a paper estimate form.
  */
 
-import { platforms, serviceArea, services, shop } from "../data/shop.ts";
-import { phoneHref, type SiteSettings } from "../settings.ts";
+import { faqs, platforms, serviceArea, services, shop } from "../data/shop.ts";
+import { phoneHref, type SiteSettings, splitAddress } from "../settings.ts";
 import { escape, layout } from "./layout.ts";
+
+function mapsHref(address: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
 
 function header(s: SiteSettings): string {
   return `
@@ -25,6 +29,7 @@ function header(s: SiteSettings): string {
     <a href="#work"><span class="nav-num mono" aria-hidden="true">01</span>The Work</a>
     <a href="#platforms"><span class="nav-num mono" aria-hidden="true">02</span>Platforms</a>
     <a href="#area"><span class="nav-num mono" aria-hidden="true">03</span>Service Area</a>
+    <a href="#faq"><span class="nav-num mono" aria-hidden="true">04</span>FAQ</a>
     <a class="nav-phone" href="${phoneHref(s.phone)}">
       <span class="nav-num mono" aria-hidden="true">TEL</span>${escape(s.phone)}</a>
     <a class="nav-cta" href="#estimate">Open a Work Order</a>
@@ -102,7 +107,30 @@ function areaSection(s: SiteSettings): string {
 <section class="section section-rule" id="area">
   <h2 class="section-title reveal">Serving the <span class="accent">OKC metro</span></h2>
   <ul class="town-list mono reveal" role="list">${towns}</ul>
-  <p class="section-lead reveal">${escape(s.hours)} · ${escape(s.address)}</p>
+  <p class="section-lead reveal">${escape(s.hours)} · ${escape(s.address)} ·
+    <a href="${mapsHref(s.address)}" rel="noopener">Get directions ↗</a></p>
+</section>`;
+}
+
+function faqSection(): string {
+  const items = faqs
+    .map(
+      (f, i) => `
+    <details class="faq-item reveal">
+      <summary>
+        <span class="faq-num mono" aria-hidden="true">Q.${String(i + 1).padStart(2, "0")}</span>
+        <span class="faq-q">${escape(f.q)}</span>
+        <span class="faq-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body"><p>${escape(f.a)}</p></div>
+    </details>`,
+    )
+    .join("");
+  return `
+<section class="section section-rule" id="faq">
+  <h2 class="section-title reveal">Straight <span class="accent">answers</span></h2>
+  <p class="section-note mono reveal">THE QUESTIONS WE GET AT THE COUNTER</p>
+  <div class="faq-list">${items}</div>
 </section>`;
 }
 
@@ -172,7 +200,8 @@ function footer(s: SiteSettings): string {
   return `
 <footer class="site-footer">
   <p class="footer-brand">SCF <span>AutoWorks LLC</span></p>
-  <p>${escape(s.address)} · <a href="${phoneHref(s.phone)}">${escape(s.phone)}</a> ·
+  <p><a href="${mapsHref(s.address)}" rel="noopener">${escape(s.address)}</a> ·
+     <a href="${phoneHref(s.phone)}">${escape(s.phone)}</a> ·
      <a href="mailto:${escape(s.email)}">${escape(s.email)}</a></p>
   <p>${escape(s.hours)}</p>
   <p class="footer-fine mono">&copy; ${year} ${escape(shop.name)} · ${
@@ -182,11 +211,64 @@ function footer(s: SiteSettings): string {
 </footer>`;
 }
 
-export function renderHome(s: SiteSettings): string {
+/** Structured data + social tags, rendered from the live settings so the
+ * phone, address, and hours search engines see are the ones the admin set. */
+function seoHead(s: SiteSettings, siteUrl: string, title: string, description: string): string {
+  const addr = splitAddress(s.address);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AutoRepair",
+        "@id": `${siteUrl}/#shop`,
+        name: shop.name,
+        url: `${siteUrl}/`,
+        image: `${siteUrl}/static/og.png`,
+        telephone: s.phone,
+        email: s.email,
+        description,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: addr.street,
+          addressLocality: addr.locality || shop.city,
+          addressRegion: shop.state,
+        },
+        areaServed: serviceArea.map((town) => ({ "@type": "City", name: town })),
+        knowsAbout: [...s.badges],
+        slogan: shop.tagline,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${siteUrl}/#faq`,
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+    ],
+  };
+  return `  <link rel="canonical" href="${siteUrl}/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${escape(shop.name)}">
+  <meta property="og:title" content="${escape(title)}">
+  <meta property="og:description" content="${escape(description)}">
+  <meta property="og:url" content="${siteUrl}/">
+  <meta property="og:image" content="${siteUrl}/static/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+}
+
+export function renderHome(s: SiteSettings, siteUrl: string): string {
+  const title = `${shop.name} — Engine, Transmission & Performance | Oklahoma City`;
+  const description =
+    "ASE Certified auto repair in Oklahoma City. Engine & transmission repair, suspension, electrical diagnostics, and performance upgrades. GM & Mopar specialists — Honda, Hyundai, Kia, and other Asian imports welcome.";
   return layout({
-    title: `${shop.name} — Engine, Transmission & Performance | Oklahoma City`,
-    description:
-      "ASE Certified auto repair in Oklahoma City. Engine & transmission repair, suspension, electrical diagnostics, and performance upgrades. GM & Mopar specialists — Honda, Hyundai, Kia, and other Asian imports welcome.",
+    title,
+    description,
+    head: seoHead(s, siteUrl, title, description),
     body: [
       header(s),
       "<main>",
@@ -194,6 +276,7 @@ export function renderHome(s: SiteSettings): string {
       workSection(),
       platformSection(s),
       areaSection(s),
+      faqSection(),
       estimateForm(),
       "</main>",
       footer(s),

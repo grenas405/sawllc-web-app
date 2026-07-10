@@ -56,6 +56,50 @@ function initReveals() {
   });
 }
 
+/* FAQ accordion: native <details> does the state (and works without JS);
+   this only adds a smooth height animation on top. */
+function initFaq() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  document.querySelectorAll(".faq-item").forEach((details) => {
+    const summary = details.querySelector("summary");
+    const body = details.querySelector(".faq-body");
+    let animating = false;
+
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (animating) return;
+      animating = true;
+
+      if (details.open) {
+        const anim = body.animate(
+          [
+            { height: `${body.offsetHeight}px`, opacity: 1 },
+            { height: "0px", opacity: 0 },
+          ],
+          { duration: 240, easing: "ease" },
+        );
+        anim.onfinish = () => {
+          details.open = false;
+          animating = false;
+        };
+      } else {
+        details.open = true;
+        const anim = body.animate(
+          [
+            { height: "0px", opacity: 0 },
+            { height: `${body.scrollHeight}px`, opacity: 1 },
+          ],
+          { duration: 280, easing: "ease" },
+        );
+        anim.onfinish = () => {
+          animating = false;
+        };
+      }
+    });
+  });
+}
+
 /* Give the paper form a plausible work-order number. */
 function initWorkOrderNumber() {
   const el = document.getElementById("wo-number");
@@ -117,5 +161,6 @@ function markFieldErrors(form, errors) {
 
 initNav();
 initReveals();
+initFaq();
 initWorkOrderNumber();
 initEstimateForm();

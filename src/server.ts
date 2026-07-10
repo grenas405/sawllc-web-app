@@ -7,7 +7,7 @@
 import type { Config } from "./config.ts";
 import { createRouter, route } from "./router.ts";
 import { logRequest } from "./log.ts";
-import { createHomePage, notFound } from "./handlers/pages.ts";
+import { createHomePage, createRobots, createSitemap, notFound } from "./handlers/pages.ts";
 import { health } from "./handlers/health.ts";
 import { createContactHandler } from "./handlers/contact.ts";
 import { createStaticHandler } from "./handlers/static.ts";
@@ -33,7 +33,9 @@ export function createHandler(config: Config, kv: Deno.Kv): (req: Request) => Pr
   const admin = createAdminHandlers(kv);
   const router = createRouter(
     [
-      route("GET", "/", createHomePage(kv)),
+      route("GET", "/", createHomePage(kv, config.siteUrl)),
+      route("GET", "/robots.txt", createRobots(config.siteUrl)),
+      route("GET", "/sitemap.xml", createSitemap(config.siteUrl)),
       route("GET", "/healthz", health),
       route("POST", "/api/contact", createContactHandler(kv, config.dataDir)),
       route("GET", "/admin", admin.dashboardPage),

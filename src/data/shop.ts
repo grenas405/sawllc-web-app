@@ -103,6 +103,40 @@ export const platforms = {
   ],
 } as const;
 
+export interface Faq {
+  readonly q: string;
+  readonly a: string;
+}
+
+/** Counter questions. Wording is a sensible default — have the shop verify
+ * policies (fees, warranty terms) before launch. */
+export const faqs: readonly Faq[] = [
+  {
+    q: "Do you charge for diagnostics?",
+    a: "Yes — an honest diagnosis takes real shop time and factory-level tooling, and it's the difference between fixing the problem and throwing parts at it. We quote the diagnostic fee up front, and if you approve the repair with us, that time goes toward the job.",
+  },
+  {
+    q: "Is the work guaranteed?",
+    a: "We stand behind our repairs with a parts-and-labor warranty on the work we perform. Ask for the current terms when you approve the estimate — we put it in writing.",
+  },
+  {
+    q: "How long will my repair take?",
+    a: "Diagnostics are usually same- or next-day. Most repairs run days, not weeks; engine and transmission jobs take longer, and you get a timeline before we start. If the plan changes, you hear it from us first.",
+  },
+  {
+    q: "Will you work on my vehicle?",
+    a: "Late-model domestic — especially GM and Mopar — is our home turf. Honda, Hyundai, Kia, and the other Asian imports are welcome, and we take select European vehicles case by case. Fastest answer: send the year, make, and model through the estimate form.",
+  },
+  {
+    q: "Can I bring my own parts?",
+    a: "Sometimes. Part quality makes or breaks a repair, so we'll tell you straight whether we'll install what you've got. Customer-supplied parts aren't covered by our warranty — parts we source are.",
+  },
+  {
+    q: "Do I need an appointment?",
+    a: "Start with the estimate form or a phone call and we'll schedule the drop-off. Walk-ins are welcome for a look, but booked work goes on the lift first.",
+  },
+] as const;
+
 export const serviceArea: readonly string[] = [
   "Oklahoma City",
   "Tuttle",

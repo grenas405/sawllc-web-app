@@ -57,8 +57,13 @@ tail -f data/estimate-requests.jsonl | jq .
 | ------ | -------------- | --------------------------------------- |
 | GET    | `/`            | Home page                               |
 | POST   | `/api/contact` | Estimate request (JSON or form-encoded) |
+| GET    | `/robots.txt`  | Crawler rules (admin disallowed)        |
+| GET    | `/sitemap.xml` | Sitemap                                 |
 | GET    | `/healthz`     | Liveness probe                          |
 | GET    | `/static/*`    | Static assets                           |
+
+The home page ships `AutoRepair` + `FAQPage` JSON-LD and OpenGraph tags rendered from the live admin
+settings; set `SITE_URL` when the domain changes.
 
 `POST /api/contact` returns `201 {ok, id}` on success, `422 {ok:false, errors:[{field,message}]}` on
 validation failure. A honeypot field (`company`) silently drops bot submissions.

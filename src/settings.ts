@@ -40,3 +40,20 @@ export function phoneHref(phone: string): string {
   const digits = phone.replace(/\D/g, "");
   return digits.length === 10 ? `tel:+1${digits}` : `tel:+${digits}`;
 }
+
+export interface AddressParts {
+  readonly street: string;
+  readonly locality: string;
+  readonly region: string;
+}
+
+/** Best-effort split of a one-line address ("street, city, ST zip") into
+ * schema.org PostalAddress parts. Unparseable input lands in `street`. */
+export function splitAddress(address: string): AddressParts {
+  const parts = address.split(",").map((p) => p.trim());
+  return {
+    street: parts[0] ?? address,
+    locality: parts[1] ?? "",
+    region: parts.slice(2).join(", "),
+  };
+}

@@ -1,5 +1,19 @@
 # Changes
 
+## 2026-07-10 — FAQ section and local-SEO layer
+
+- New "Straight answers" FAQ section (six counter questions: diagnostic fee, warranty, turnaround,
+  vehicle coverage, customer parts, appointments) built on native `<details>` — works without JS —
+  with a smooth height/opacity animation, a plus-to-X icon, work-order Q-numbers, and orange
+  hover/open states; respects `prefers-reduced-motion`. Added `04 FAQ` to the nav. FAQ wording is a
+  sensible default in `src/data/shop.ts` — shop should verify policies before launch.
+- Local SEO: `AutoRepair` + `FAQPage` JSON-LD rendered from live KV settings (phone, address, hours,
+  brands stay truthful automatically), OpenGraph/Twitter tags with a generated 1200×630 share card
+  (`static/og.png`), canonical URL, `robots.txt` (disallows `/admin`, points at the sitemap),
+  `sitemap.xml`, and "Get directions" Google Maps links on the address.
+- New `SITE_URL` env (default `https://www.denogenesis.com`) in config and the systemd unit — swap
+  it when the real domain lands. 3 new tests (robots, sitemap, address parsing; 24 total).
+
 ## 2026-07-10 — Hamburger nav on tablets too
 
 - The drawer navigation (hamburger, full-screen panel) now applies up to 1024px instead of 720px, so

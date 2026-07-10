@@ -9,6 +9,7 @@ export interface Config {
   readonly dataDir: string;
   readonly staticDir: string;
   readonly kvPath: string;
+  readonly siteUrl: string;
 }
 
 export function loadConfig(env: (key: string) => string | undefined = Deno.env.get): Config {
@@ -19,5 +20,6 @@ export function loadConfig(env: (key: string) => string | undefined = Deno.env.g
     dataDir,
     staticDir: env("STATIC_DIR") ?? "static",
     kvPath: env("KV_PATH") ?? `${dataDir}/site.kv`,
+    siteUrl: (env("SITE_URL") ?? "https://www.denogenesis.com").replace(/\/+$/, ""),
   };
 }
