@@ -208,10 +208,95 @@ a {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Mid-width: not enough room for the phone alongside the other links. */
-@media (min-width: 721px) and (max-width: 980px) {
-  .site-nav .nav-phone {
-    display: none;
+/* ── Drawer nav: phones AND tablets (≤1024px) ───────────────────────── */
+
+@media (max-width: 1024px) {
+  /* With JS: hamburger + full-screen drawer with huge, thumb-sized links.
+     Without JS: the nav simply wraps under the brand, always visible. */
+  .js .nav-toggle {
+    display: flex;
+  }
+
+  /* backdrop-filter would make the header the containing block for the
+     fixed drawer below — keep the drawer-mode header solid instead. */
+  .js .site-header {
+    backdrop-filter: none;
+    background: var(--asphalt);
+  }
+
+  .js .site-header .brand,
+  .js .nav-toggle {
+    position: relative;
+    z-index: 11;
+  }
+
+  html:not(.js) .site-header {
+    flex-wrap: wrap;
+  }
+
+  html:not(.js) .site-nav.drawer {
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+  }
+
+  .js .site-nav.drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    padding: 5.5rem clamp(1.2rem, 6vw, 4rem) 2rem;
+    background: var(--asphalt);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 250ms ease, transform 250ms ease, visibility 0s linear 250ms;
+  }
+
+  .js.nav-open .site-nav.drawer {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+
+  .js .site-nav.drawer a {
+    font-size: clamp(2.4rem, 9vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    padding: 0.55em 0;
+    border-bottom: 1px dotted var(--line);
+    background: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .js .site-nav.drawer a:active,
+  .js .site-nav.drawer a:hover {
+    color: var(--hemi);
+  }
+
+  .js .site-nav.drawer .nav-num {
+    display: inline;
+    font-size: 0.9rem;
+    color: var(--hemi);
+  }
+
+  .js .site-nav.drawer .nav-cta {
+    margin-top: 1.6rem;
+    border-bottom: none;
+    background: var(--hemi);
+    color: var(--asphalt);
+    justify-content: center;
+    font-size: clamp(1.6rem, 6.5vw, 2rem);
+    padding: 0.6em 1em 0.5em;
+  }
+
+  .nav-open {
+    overflow: hidden;
   }
 }
 
@@ -699,94 +784,6 @@ a {
 /* ── Responsive ─────────────────────────────────────────────────────── */
 
 @media (max-width: 720px) {
-  /* With JS: hamburger + full-screen drawer with huge, thumb-sized links.
-     Without JS: the nav simply wraps under the brand, always visible. */
-  .js .nav-toggle {
-    display: flex;
-  }
-
-  /* backdrop-filter would make the header the containing block for the
-     fixed drawer below — keep the mobile header solid instead. */
-  .js .site-header {
-    backdrop-filter: none;
-    background: var(--asphalt);
-  }
-
-  .js .site-header .brand,
-  .js .nav-toggle {
-    position: relative;
-    z-index: 11;
-  }
-
-  html:not(.js) .site-header {
-    flex-wrap: wrap;
-  }
-
-  html:not(.js) .site-nav.drawer {
-    flex-wrap: wrap;
-    font-size: 1.1rem;
-  }
-
-  .js .site-nav.drawer {
-    position: fixed;
-    inset: 0;
-    z-index: 9;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    gap: 0;
-    padding: 5.5rem clamp(1.2rem, 6vw, 2.5rem) 2rem;
-    background: var(--asphalt);
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-12px);
-    transition: opacity 250ms ease, transform 250ms ease, visibility 0s linear 250ms;
-  }
-
-  .js.nav-open .site-nav.drawer {
-    visibility: visible;
-    opacity: 1;
-    transform: none;
-    transition: opacity 250ms ease, transform 250ms ease;
-  }
-
-  .js .site-nav.drawer a {
-    font-size: clamp(2.4rem, 9vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.15;
-    padding: 0.55em 0;
-    border-bottom: 1px dotted var(--line);
-    background: none;
-    display: flex;
-    align-items: baseline;
-    gap: 0.8rem;
-  }
-
-  .js .site-nav.drawer a:active,
-  .js .site-nav.drawer a:hover {
-    color: var(--hemi);
-  }
-
-  .js .site-nav.drawer .nav-num {
-    display: inline;
-    font-size: 0.9rem;
-    color: var(--hemi);
-  }
-
-  .js .site-nav.drawer .nav-cta {
-    margin-top: 1.6rem;
-    border-bottom: none;
-    background: var(--hemi);
-    color: var(--asphalt);
-    justify-content: center;
-    font-size: clamp(1.6rem, 6.5vw, 2rem);
-    padding: 0.6em 1em 0.5em;
-  }
-
-  .nav-open {
-    overflow: hidden;
-  }
-
   .op-row {
     grid-template-columns: 1fr;
     gap: 0.4rem;

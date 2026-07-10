@@ -1,5 +1,11 @@
 # Changes
 
+## 2026-07-10 — Hamburger nav on tablets too
+
+- The drawer navigation (hamburger, full-screen panel) now applies up to 1024px instead of 720px,
+  so tablets get the same big touch-friendly menu as phones; the inline link row is desktop-only.
+  This replaces the old 721–980px rule that just hid the phone number for lack of space.
+
 ## 2026-07-10 — Estimate-request inbox in the admin dashboard
 
 - The dashboard (now "Shop Office") opens with an Incoming Requests inbox: every estimate request
