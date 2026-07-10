@@ -65,9 +65,11 @@ validation failure. A honeypot field (`company`) silently drops bot submissions.
 
 ## Admin
 
-`/admin` is a dashboard for managing the shop's contact details, address, hours, and brand badges;
-saves go live on the public site immediately. Settings, the admin credential, sessions, and login
-throttling live in Deno KV (`KV_PATH`, default `data/site.kv`), merged over the defaults in
+`/admin` is the Shop Office: an inbox of incoming estimate requests (newest first, tap-to-call
+customer phone numbers, mark-handled workflow) plus management of the shop's contact details,
+address, hours, and brand badges; saves go live on the public site immediately. Estimate requests
+live in Deno KV with a JSONL audit copy in `DATA_DIR`. Settings, the admin credential, sessions, and
+login throttling live in Deno KV (`KV_PATH`, default `data/site.kv`), merged over the defaults in
 `src/data/shop.ts`. Set (or replace) the admin password with:
 
 ```sh

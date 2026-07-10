@@ -1,5 +1,16 @@
 # Changes
 
+## 2026-07-10 — Estimate-request inbox in the admin dashboard
+
+- The dashboard (now "Shop Office") opens with an Incoming Requests inbox: every estimate request
+  from the website shows as a card — date, NEW/HANDLED state, big vehicle title, service tag,
+  customer name with tap-to-call phone and mailto email, and the customer's message. A "Mark
+  handled" button files it away (dimmed, reversible); the panel header counts the new ones.
+- Estimate requests now persist in Deno KV (keyed by timestamp for newest-first listing) alongside
+  the existing JSONL audit log. New `POST /api/admin/requests/mark` endpoint (session-protected).
+- Fix: ghost buttons rendered with the user-agent's gray background when used on `<button>` elements
+  — `.btn-ghost` now sets `background: transparent`.
+
 ## 2026-07-06 — Mobile-friendly navigation
 
 - Public nav rebuilt as an industry-standard mobile drawer: hamburger toggle (44px touch target,

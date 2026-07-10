@@ -1,11 +1,12 @@
 /**
  * handlers/contact.ts — one job: accept an estimate request.
- * Parse → validate (zod) → persist one JSON line → acknowledge.
- * Storage is an append-only JSONL file: greppable, tailable, diffable.
+ * Parse → validate (zod) → store in KV (feeds the admin inbox) and
+ * append one JSON line to an audit log: greppable, tailable, diffable.
  */
 
 import type { Handler } from "../router.ts";
 import { parseContactRequest } from "../schema/contact.ts";
+import { addRequest } from "../requests.ts";
 
 async function readBody(req: Request): Promise<unknown> {
   const type = req.headers.get("content-type") ?? "";
@@ -20,7 +21,7 @@ async function appendRequest(dataDir: string, record: Record<string, unknown>): 
   await Deno.writeTextFile(`${dataDir}/estimate-requests.jsonl`, line, { append: true });
 }
 
-export function createContactHandler(dataDir: string): Handler {
+export function createContactHandler(kv: Deno.Kv, dataDir: string): Handler {
   return async (req) => {
     let input: unknown;
     try {
@@ -44,9 +45,9 @@ export function createContactHandler(dataDir: string): Handler {
       return Response.json({ ok: true, id: crypto.randomUUID() });
     }
 
-    const id = crypto.randomUUID();
     const { company: _hp, ...data } = result.data;
-    await appendRequest(dataDir, { id, receivedAt: new Date().toISOString(), ...data });
-    return Response.json({ ok: true, id }, { status: 201 });
+    const request = await addRequest(kv, data);
+    await appendRequest(dataDir, { id: request.id, receivedAt: request.receivedAt, ...data });
+    return Response.json({ ok: true, id: request.id }, { status: 201 });
   };
 }

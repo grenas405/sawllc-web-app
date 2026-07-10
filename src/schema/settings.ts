@@ -47,3 +47,16 @@ export function parsePassword(input: unknown): string | null {
   const result = LoginSchema.safeParse(input);
   return result.success ? result.data.password : null;
 }
+
+export const MarkRequestSchema = z.object({
+  ts: z.number().int().positive(),
+  id: z.uuid(),
+  handled: z.boolean(),
+});
+
+export type MarkRequest = z.infer<typeof MarkRequestSchema>;
+
+export function parseMarkRequest(input: unknown): MarkRequest | null {
+  const result = MarkRequestSchema.safeParse(input);
+  return result.success ? result.data : null;
+}

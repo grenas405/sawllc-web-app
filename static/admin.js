@@ -117,6 +117,45 @@ function initSettings() {
   });
 }
 
+/* ── Incoming requests: mark handled / back to new ──────────────────── */
+
+function initRequests() {
+  const list = document.getElementById("request-list");
+  if (!list) return;
+
+  list.addEventListener("click", async (event) => {
+    const button = event.target.closest(".btn-mark");
+    if (!button) return;
+    const card = button.closest(".request");
+    const handled = !card.classList.contains("handled");
+    button.disabled = true;
+
+    try {
+      const res = await fetch("/api/admin/requests/mark", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ts: Number(card.dataset.ts), id: card.dataset.id, handled }),
+      });
+      const body = await res.json();
+      if (body.ok) {
+        card.classList.toggle("handled", handled);
+        button.textContent = handled ? "Move back to new" : "Mark handled";
+        card.querySelector(".request-meta").innerHTML = card
+          .querySelector(".request-meta")
+          .innerHTML.replace(
+            handled ? "<strong>NEW</strong>" : "HANDLED",
+            handled ? "HANDLED" : "<strong>NEW</strong>",
+          );
+      } else if (res.status === 401) {
+        location.href = "/admin/login";
+      }
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+
 initLogin();
 initLogout();
 initSettings();
+initRequests();

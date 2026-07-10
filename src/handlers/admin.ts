@@ -9,7 +9,8 @@ import type { Handler } from "../router.ts";
 import { getCredential, verifyPassword } from "../auth.ts";
 import { createSession, destroySession, hasSession } from "../sessions.ts";
 import { loadSettings, saveSettings } from "../settings.ts";
-import { parsePassword, parseSettings } from "../schema/settings.ts";
+import { listRequests, setHandled } from "../requests.ts";
+import { parseMarkRequest, parsePassword, parseSettings } from "../schema/settings.ts";
 import { renderDashboard, renderLoginPage } from "../views/admin.ts";
 
 const COOKIE = "scf_admin";
@@ -60,7 +61,7 @@ export function createAdminHandlers(kv: Deno.Kv): Record<string, Handler> {
 
   const dashboardPage: Handler = async (req) =>
     (await isAuthed(req))
-      ? html(renderDashboard(await loadSettings(kv)))
+      ? html(renderDashboard(await loadSettings(kv), await listRequests(kv)))
       : redirect("/admin/login");
 
   const login: Handler = async (req) => {
@@ -162,5 +163,28 @@ export function createAdminHandlers(kv: Deno.Kv): Record<string, Handler> {
     return Response.json({ ok: true, settings: result.data });
   };
 
-  return { loginPage, dashboardPage, login, logout, getSettings, putSettings };
+  const markRequest: Handler = async (req) => {
+    if (!(await isAuthed(req))) return Response.json({ ok: false }, { status: 401 });
+
+    let input: unknown;
+    try {
+      input = await req.json();
+    } catch {
+      return Response.json({ ok: false, errors: [{ field: "", message: "Malformed body" }] }, {
+        status: 400,
+      });
+    }
+
+    const mark = parseMarkRequest(input);
+    if (mark === null) {
+      return Response.json({ ok: false, errors: [{ field: "", message: "Bad request" }] }, {
+        status: 422,
+      });
+    }
+    const found = await setHandled(kv, mark.ts, mark.id, mark.handled);
+    if (!found) return Response.json({ ok: false }, { status: 404 });
+    return Response.json({ ok: true });
+  };
+
+  return { loginPage, dashboardPage, login, logout, getSettings, putSettings, markRequest };
 }

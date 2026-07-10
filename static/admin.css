@@ -146,6 +146,90 @@
   font-size: 0.95rem;
 }
 
+/* ── Incoming requests ──────────────────────────────────────────────── */
+
+.panel-requests h2 {
+  flex-wrap: wrap;
+}
+
+.fresh-count {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--asphalt);
+  background: var(--hemi);
+  padding: 0.25em 0.7em;
+  align-self: center;
+}
+
+.request {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--hemi);
+  background: var(--asphalt);
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.request.handled {
+  border-left-color: var(--line);
+  opacity: 0.55;
+}
+
+.request-meta {
+  font-size: 0.72rem;
+  color: var(--dust);
+  margin-bottom: 0.5rem;
+}
+
+.request-meta strong {
+  color: var(--hemi);
+}
+
+.request h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+
+.request-line {
+  margin-bottom: 0.4rem;
+}
+
+.request-line a {
+  color: var(--hemi);
+}
+
+.request-tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--hemi);
+  color: var(--hemi);
+  padding: 0.2em 0.7em;
+}
+
+.request blockquote {
+  border-left: 2px dotted var(--line);
+  color: var(--dust);
+  padding: 0.3rem 0 0.3rem 1rem;
+  margin: 0.7rem 0;
+}
+
+.btn-mark {
+  font-size: 1rem;
+  padding: 0.5em 1.1em;
+  margin-top: 0.5rem;
+}
+
+.request-empty {
+  color: var(--dust);
+  font-size: 0.85rem;
+}
+
 /* ── Save bar ───────────────────────────────────────────────────────── */
 
 .save-bar {

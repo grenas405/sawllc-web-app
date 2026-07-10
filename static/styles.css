@@ -294,6 +294,7 @@ a {
 }
 
 .btn-ghost {
+  background: transparent;
   border-color: var(--line);
   color: var(--bone);
 }

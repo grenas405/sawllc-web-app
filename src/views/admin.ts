@@ -5,7 +5,25 @@
  */
 
 import type { SiteSettings } from "../settings.ts";
+import type { EstimateRequest } from "../requests.ts";
 import { escape } from "./layout.ts";
+
+const SERVICE_LABELS: Record<string, string> = {
+  engine: "Engine repair",
+  transmission: "Transmission repair",
+  suspension: "Suspension",
+  electrical: "Electrical diagnostics",
+  performance: "Performance upgrades",
+  other: "Other",
+};
+
+const WHEN = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/Chicago",
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+});
 
 function adminShell(title: string, body: string): string {
   return `<!doctype html>
@@ -60,7 +78,40 @@ function textField(id: string, label: string, value: string, hint = ""): string 
     </div>`;
 }
 
-export function renderDashboard(settings: SiteSettings): string {
+function requestCard(r: EstimateRequest): string {
+  const phoneDigits = r.phone.replace(/\D/g, "");
+  const service = SERVICE_LABELS[r.service] ?? r.service;
+  return `
+    <article class="request${r.handled ? " handled" : ""}" data-ts="${r.ts}" data-id="${r.id}">
+      <p class="request-meta mono">${escape(WHEN.format(new Date(r.ts)))} —
+        ${r.handled ? "HANDLED" : "<strong>NEW</strong>"}</p>
+      <h3>${escape(String(r.vehicleYear))} ${escape(r.vehicleMake)} ${escape(r.vehicleModel)}</h3>
+      <p class="request-line"><span class="request-tag">${escape(service)}</span></p>
+      <p class="request-line">${escape(r.name)} ·
+        <a href="tel:+1${escape(phoneDigits)}">${escape(r.phone)}</a>${
+    r.email ? ` · <a href="mailto:${escape(r.email)}">${escape(r.email)}</a>` : ""
+  }</p>
+      ${r.message ? `<blockquote>${escape(r.message)}</blockquote>` : ""}
+      <button class="btn btn-ghost btn-mark" type="button">
+        ${r.handled ? "Move back to new" : "Mark handled"}</button>
+    </article>`;
+}
+
+function requestsSection(requests: EstimateRequest[]): string {
+  const fresh = requests.filter((r) => !r.handled).length;
+  const cards = requests.length === 0
+    ? `<p class="request-empty mono">No estimate requests yet — they'll show up here the moment
+       a customer sends one from the website.</p>`
+    : requests.map(requestCard).join("");
+  return `
+  <section class="panel panel-requests">
+    <h2><span class="panel-num mono">00</span> Incoming requests
+      ${fresh > 0 ? `<span class="fresh-count">${fresh} new</span>` : ""}</h2>
+    <div id="request-list">${cards}</div>
+  </section>`;
+}
+
+export function renderDashboard(settings: SiteSettings, requests: EstimateRequest[]): string {
   const brandLines = settings.badges.join("\n");
   return adminShell(
     "Dashboard — SCF AutoWorks Admin",
@@ -76,8 +127,10 @@ export function renderDashboard(settings: SiteSettings): string {
   </nav>
 </header>
 <main class="admin-main">
-  <h1 class="section-title">Shop <span class="accent">settings</span></h1>
-  <p class="section-note mono">CHANGES GO LIVE ON THE WEBSITE THE MOMENT YOU SAVE</p>
+  <h1 class="section-title">Shop <span class="accent">office</span></h1>
+  <p class="section-note mono">ESTIMATE REQUESTS COME IN BELOW — SETTINGS GO LIVE THE MOMENT YOU SAVE</p>
+
+  ${requestsSection(requests)}
 
   <form id="settings-form" novalidate>
     <section class="panel">
