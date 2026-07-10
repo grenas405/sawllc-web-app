@@ -9,17 +9,24 @@ import { platforms, serviceArea, services, shop } from "../data/shop.ts";
 import { phoneHref, type SiteSettings } from "../settings.ts";
 import { escape, layout } from "./layout.ts";
 
-function header(): string {
+function header(s: SiteSettings): string {
   return `
 <header class="site-header" id="top">
   <a class="brand" href="#top">
     <span class="brand-mark" aria-hidden="true">SCF</span>
     <span class="brand-name">AutoWorks <em>LLC</em></span>
   </a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="#work">The Work</a>
-    <a href="#platforms">Platforms</a>
-    <a href="#area">Service Area</a>
+  <button class="nav-toggle" id="nav-toggle" type="button"
+    aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="nav-toggle-label">Menu</span>
+  </button>
+  <nav class="site-nav drawer" id="site-nav" aria-label="Primary">
+    <a href="#work"><span class="nav-num mono" aria-hidden="true">01</span>The Work</a>
+    <a href="#platforms"><span class="nav-num mono" aria-hidden="true">02</span>Platforms</a>
+    <a href="#area"><span class="nav-num mono" aria-hidden="true">03</span>Service Area</a>
+    <a class="nav-phone" href="${phoneHref(s.phone)}">
+      <span class="nav-num mono" aria-hidden="true">TEL</span>${escape(s.phone)}</a>
     <a class="nav-cta" href="#estimate">Open a Work Order</a>
   </nav>
 </header>`;
@@ -181,7 +188,7 @@ export function renderHome(s: SiteSettings): string {
     description:
       "ASE Certified auto repair in Oklahoma City. Engine & transmission repair, suspension, electrical diagnostics, and performance upgrades. GM & Mopar specialists — Honda, Hyundai, Kia, and other Asian imports welcome.",
     body: [
-      header(),
+      header(s),
       "<main>",
       hero(s),
       workSection(),

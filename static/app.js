@@ -8,6 +8,30 @@
    renders fully visible (no-JS fallback). */
 document.documentElement.classList.add("js");
 
+/* Mobile nav drawer: hamburger toggles it, any link click or Escape
+   closes it. Desktop ignores all of this via CSS. */
+function initNav() {
+  const toggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("site-nav");
+  if (!toggle || !nav) return;
+
+  const setOpen = (open) => {
+    document.documentElement.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.querySelector(".nav-toggle-label").textContent = open ? "Close" : "Menu";
+  };
+
+  toggle.addEventListener("click", () => {
+    setOpen(!document.documentElement.classList.contains("nav-open"));
+  });
+  nav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+}
+
 /* Scroll-triggered reveals. */
 function initReveals() {
   const items = document.querySelectorAll(".reveal");
@@ -91,6 +115,7 @@ function markFieldErrors(form, errors) {
   }
 }
 
+initNav();
 initReveals();
 initWorkOrderNumber();
 initEstimateForm();

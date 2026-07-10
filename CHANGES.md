@@ -1,5 +1,19 @@
 # Changes
 
+## 2026-07-06 — Mobile-friendly navigation
+
+- Public nav rebuilt as an industry-standard mobile drawer: hamburger toggle (44px touch target,
+  animated to an X with a Menu/Close label) opening a full-screen panel with huge Big Shoulders
+  Display links, numbered like the work-order sections, dotted rules, a tap-to-call phone item
+  (pulled from admin-editable settings), and a full-width work-order CTA. Closes on link tap or
+  Escape; body scroll locks while open.
+- Desktop links upgraded to the display face (bigger, bolder) with a sliding orange underline on
+  hover; phone number joins the desktop nav (hidden 721–980px where it doesn't fit).
+- No-JS fallback: without JavaScript the nav renders as always-visible wrapped links; the hamburger
+  never appears.
+- Fix: the header's `backdrop-filter` made it the CSS containing block for the fixed drawer,
+  collapsing the panel to the header strip — mobile header is now solid asphalt instead.
+
 ## 2026-07-06 — Zod from JSR instead of npm
 
 - Swapped the `zod` import mapping to `jsr:@zod/zod` and regenerated `deno.lock` (also dropping a

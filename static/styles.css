@@ -124,33 +124,95 @@ a {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: clamp(0.8rem, 2vw, 1.8rem);
-  font-weight: 600;
-  font-size: 0.95rem;
+  gap: clamp(1rem, 2.5vw, 2.2rem);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.3rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .site-nav a {
   text-decoration: none;
   color: var(--dust);
-  transition: color 150ms;
+  /* Sliding underline, garage-floor orange. */
+  background: linear-gradient(var(--hemi), var(--hemi)) no-repeat left bottom / 0 3px;
+  transition: color 150ms, background-size 200ms ease;
+  padding-bottom: 0.15em;
 }
 
 .site-nav a:hover {
   color: var(--bone);
+  background-size: 100% 3px;
+}
+
+.site-nav .nav-num {
+  display: none;
+}
+
+.site-nav .nav-phone {
+  color: var(--hemi);
 }
 
 .site-nav .nav-cta {
   color: var(--asphalt);
   background: var(--hemi);
-  padding: 0.5em 1em;
+  padding: 0.45em 1em 0.35em;
   transition: background 150ms;
 }
 
 .site-nav .nav-cta:hover {
   background: var(--hemi-hot);
   color: var(--asphalt);
+}
+
+/* Hamburger — hidden on desktop, hidden entirely without JS. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: 2px solid var(--line);
+  color: var(--bone);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.nav-toggle-bars {
+  display: grid;
+  gap: 4px;
+  width: 22px;
+}
+
+.nav-toggle-bars i {
+  height: 3px;
+  background: var(--hemi);
+  transition: transform 200ms ease, opacity 150ms;
+}
+
+.nav-open .nav-toggle-bars i:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-open .nav-toggle-bars i:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-open .nav-toggle-bars i:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mid-width: not enough room for the phone alongside the other links. */
+@media (min-width: 721px) and (max-width: 980px) {
+  .site-nav .nav-phone {
+    display: none;
+  }
 }
 
 /* ── Hero ───────────────────────────────────────────────────────────── */
@@ -622,6 +684,12 @@ a {
     transition: none;
   }
 
+  .js .site-nav.drawer,
+  .js.nav-open .site-nav.drawer,
+  .nav-toggle-bars i {
+    transition: none;
+  }
+
   .btn-primary:hover {
     transform: none;
   }
@@ -630,14 +698,92 @@ a {
 /* ── Responsive ─────────────────────────────────────────────────────── */
 
 @media (max-width: 720px) {
-  .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.6rem;
+  /* With JS: hamburger + full-screen drawer with huge, thumb-sized links.
+     Without JS: the nav simply wraps under the brand, always visible. */
+  .js .nav-toggle {
+    display: flex;
   }
 
-  .site-nav {
+  /* backdrop-filter would make the header the containing block for the
+     fixed drawer below — keep the mobile header solid instead. */
+  .js .site-header {
+    backdrop-filter: none;
+    background: var(--asphalt);
+  }
+
+  .js .site-header .brand,
+  .js .nav-toggle {
+    position: relative;
+    z-index: 11;
+  }
+
+  html:not(.js) .site-header {
     flex-wrap: wrap;
+  }
+
+  html:not(.js) .site-nav.drawer {
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+  }
+
+  .js .site-nav.drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    padding: 5.5rem clamp(1.2rem, 6vw, 2.5rem) 2rem;
+    background: var(--asphalt);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 250ms ease, transform 250ms ease, visibility 0s linear 250ms;
+  }
+
+  .js.nav-open .site-nav.drawer {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+
+  .js .site-nav.drawer a {
+    font-size: clamp(2.4rem, 9vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    padding: 0.55em 0;
+    border-bottom: 1px dotted var(--line);
+    background: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .js .site-nav.drawer a:active,
+  .js .site-nav.drawer a:hover {
+    color: var(--hemi);
+  }
+
+  .js .site-nav.drawer .nav-num {
+    display: inline;
+    font-size: 0.9rem;
+    color: var(--hemi);
+  }
+
+  .js .site-nav.drawer .nav-cta {
+    margin-top: 1.6rem;
+    border-bottom: none;
+    background: var(--hemi);
+    color: var(--asphalt);
+    justify-content: center;
+    font-size: clamp(1.6rem, 6.5vw, 2rem);
+    padding: 0.6em 1em 0.5em;
+  }
+
+  .nav-open {
+    overflow: hidden;
   }
 
   .op-row {
